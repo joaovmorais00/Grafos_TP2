@@ -1,8 +1,8 @@
-#include "tp1.h"
+#include "tp2.h"
 
-void preencheMatriz(int** matriz, int tamMatriz, int* origens, int* destinos, int* valores){
-    for(int i=0; i<tamMatriz; i++){
-            matriz[origens[i]-1][destinos[i]-1] = valores[i];
+void preencheMatriz(int** matriz, int numArestas, int* origens, int* destinos, int* valores){
+    for(int i=0; i<numArestas; i++){
+        matriz[origens[i]-1][destinos[i]-1] = valores[i];
     }
 }
 
@@ -30,19 +30,12 @@ void dividirString(char* string, int* origem, int* destino, int* valor){
 }
 
 void imprimeMatriz(int** matriz, int linhas, int colunas){
+    printf("\n");
     for(int i = 0; i<linhas; i++){
         for(int j = 0; j<colunas; j++){
             printf("%d\t", matriz[i][j]);
         }
         printf("\n");
-    }
-}
-
-void zeraMatriz(int** matriz, int linhas, int colunas){
-    for(int i = 0; i< linhas; i++){
-        for(int j = 0; j<colunas; j++){
-            matriz[i][j] = 0;
-        }
     }
 }
 
@@ -58,7 +51,6 @@ int menu(int **matriz, int totalVertices, int totalArestas){
         break;
     case 2:
         printf("\nDigite um vertice: ");
-        
         scanf("%d", &vertice);
         grauVertice(matriz, totalVertices, vertice);
         return 1;
