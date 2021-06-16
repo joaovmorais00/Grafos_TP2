@@ -22,9 +22,9 @@ void main (int argc, char *argv[]){
         }
         int **grafo = (int **) calloc(maiorVertice, sizeof(int*));
         for(int i = 0; i<maiorVertice; i++) grafo[i] = (int *) calloc(maiorVertice, sizeof(int));
-        preencheMatriz(grafo, contador, origens, destinos, valores);
-        int continua = 1;
-        while(continua==1) continua = menu(grafo, maiorVertice, contador);
+        preencheGrafo(grafo, contador, origens, destinos, valores);
+        //imprimeMatriz(grafo, maiorVertice, maiorVertice);
+        matrizDistancias(grafo, maiorVertice);
         for(int i =0; i<maiorVertice; i++) free(grafo[i]);
         free(grafo);
     }

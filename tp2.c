@@ -1,6 +1,6 @@
 #include "tp2.h"
 
-void preencheMatriz(int** matriz, int numArestas, int* origens, int* destinos, int* valores){
+void preencheGrafo(int** matriz, int numArestas, int* origens, int* destinos, int* valores){
     for(int i=0; i<numArestas; i++){
         matriz[origens[i]-1][destinos[i]-1] = valores[i];
     }
@@ -39,80 +39,28 @@ void imprimeMatriz(int** matriz, int linhas, int colunas){
     }
 }
 
-int menu(int **matriz, int totalVertices, int totalArestas){
-    printf("\nMENU:\n\n1-Sumario\n2-Grau de vertice\n3-Sucessores de vertice\n4-Antecessores de vertice\n0-SAIR\n\nDigite uma opcao: ");
-    int opcao, vertice;;
-    scanf("%d", &opcao);
-    switch (opcao)
-    {
-    case 1:
-        sumario(matriz, totalVertices, totalArestas);
-        return 1;
-        break;
-    case 2:
-        printf("\nDigite um vertice: ");
-        scanf("%d", &vertice);
-        grauVertice(matriz, totalVertices, vertice);
-        return 1;
-        break;
-    case 3:
-        printf("\nDigite um vertice: ");
-        scanf("%d", &vertice);
-        sucessores(matriz, totalVertices, vertice);
-        return 1;
-        break;
-    case 4:
-        printf("\nDigite um vertice: ");
-        scanf("%d", &vertice);
-        antecessores(matriz, totalVertices, vertice);
-        return 1;
-        break;
-    case 0:
-        printf("\nentrou 0\n");
-        return 0;
-        break;
-    
-    default:
-        break;
+void matrizDistancias(int **grafo, int numVertices){
+    int **distancias = (int **) calloc(numVertices, sizeof(int*));
+    for(int i = 0; i<numVertices; i++) distancias[i] = (int *) calloc(numVertices, sizeof(int));
+    for(int i=0; i<numVertices; i++){
+        for(int j=0; j<numVertices; j++){
+            if(i!=j){
+                if(grafo[i][j]==0) distancias[i][j] = infinito;
+                else distancias[i][j] = grafo[i][j];
+            }
+        }
     }
-}
-
-void grauVertice(int **matriz, int totalVertices, int vertice){
-    if(vertice>totalVertices){ 
-        printf("\nVertice invalido\n");
-        return;
+    for(int k=0; k<numVertices; k++){
+        for(int i=0; i<numVertices; i++){
+            for(int j=0; j<numVertices; j++){
+                if(distancias[i][j]>distancias[i][k] + distancias[k][j]){
+                    distancias[i][j] = distancias[i][k] + distancias[k][j];
+                }
+            }
+        }
     }
-    int entrada=0, saida=0;
-    for(int i=0; i<totalVertices; i++){
-        if(matriz[i][vertice-1]!=0) entrada++;
-        if(matriz[vertice-1][i]!=0) saida++;
-    }
-    printf("\nGrau de entrada: %d, Grau de saida: %d\n", entrada, saida);
-}
-
-void sumario(int** matriz, int totalVertices, int totalArestas){
-    float densidade = (float)totalArestas/(totalVertices*(totalVertices-1));
-    printf("Numero de Vertices: %d, Numero de Arestas: %d, Densidade: %.4f", totalVertices, totalArestas, densidade);
-}
-void sucessores(int **matriz, int totalVertices, int vertice){
-    if(vertice>totalVertices){ 
-        printf("\nVertice invalido\n");
-        return;
-    }
-    printf("\nSucessores: ");
-    for(int i=0; i<totalVertices; i++){
-        if(matriz[vertice-1][i]!=0) printf("%d ", i+1); 
-    }
-    printf("\n");
-}
-void antecessores(int **matriz, int totalVertices, int vertice){
-    if(vertice>totalVertices){ 
-        printf("\nVertice invalido\n");
-        return;
-    }
-    printf("\nAntecessores: ");
-    for(int i=0; i<totalVertices; i++){
-        if(matriz[i][vertice-1]!=0) printf("%d ", i+1); 
-    }
-    printf("\n");
+    printf("Matriz de distâncias:");
+    imprimeMatriz(distancias, numVertices, numVertices);
+    for(int i =0; i<numVertices; i++) free(distancias[i]);
+    free(distancias);
 }
